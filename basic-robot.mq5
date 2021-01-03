@@ -11,11 +11,12 @@
 //+------------------------------------------------------------------+
 int OnInit()
   {
-//---
-Alert(SYMBOL_PRICE_CHANGE);
-Alert(_Symbol);  
-Alert("");
-//---
+  double val = iLowest("EURUSD",PERIOD_W1,MODE_LOW,WHOLE_ARRAY,0);
+  Alert(TimeCurrent());
+  Alert(val);
+  
+
+
    return(INIT_SUCCEEDED);
   }
 //+------------------------------------------------------------------+
@@ -30,9 +31,12 @@ void OnDeinit(const int reason)
 //| Expert tick function                                             |
 //+------------------------------------------------------------------+
 void OnTick()
-  {
-//---
-
-   //Comment(SYMBOL_ASK,"\n",SYMBOL_BID,"\n",PRICE_CLOSE);
-  }
+  {}
 //+------------------------------------------------------------------+
+
+int random_signal ()
+{
+
+return(MathRand());
+
+}
