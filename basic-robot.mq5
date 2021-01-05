@@ -13,10 +13,7 @@ int OnInit()
 {
 
 
-
-   Alert(TIME_SECONDS);
-   Alert(TIME_DATE);
-
+   
    return(INIT_SUCCEEDED);
 }
 //+------------------------------------------------------------------+
