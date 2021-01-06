@@ -1,4 +1,6 @@
 #include<Trade\Trade.mqh>
+#include <Trade\AccountInfo.mqh>
+
 //+------------------------------------------------------------------+
 //|                                                  Basic-Robot.mq5 |
 //|                        Copyright 2021, MetaQuotes Software Corp. |
