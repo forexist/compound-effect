@@ -2,25 +2,23 @@
 #include <Trade\AccountInfo.mqh>
 
 //+------------------------------------------------------------------+
-//|                                                  Basic-Robot.mq5 |
-//|                        Copyright 2021, MetaQuotes Software Corp. |
-//|                      https://forexist.github.io/compound-effect/ |
-//+------------------------------------------------------------------+
-#property copyright "Copyright 2021, MetaQuotes Software Corp."
-#property link      "https://www.mql5.com"
-#property version   "1.00"
-//+------------------------------------------------------------------+
 //| Expert initialization function                                   |
 //+------------------------------------------------------------------+
+input string Expert_Title ="amoosi";       // Document name
+ulong Expert_MagicNumber =06051369;       // Magic Number
+bool Expert_EveryTick =false;       //
 
+CTrade trade;
 
-
-
-CTrade trade; 
-
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 int OnInit()
 {
-
+   
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
    return(INIT_SUCCEEDED);
 }
 //+------------------------------------------------------------------+
@@ -94,6 +92,9 @@ string trade_or_do_not_trade_that_is_the_question() // OFF or ON?
 
 
 
+//+------------------------------------------------------------------+
+//|                                                                  |
+//+------------------------------------------------------------------+
 string random_signal()
 {
 
