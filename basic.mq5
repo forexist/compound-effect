@@ -35,4 +35,38 @@ void OnTick()
 
 // A ends here.
 
+
+// D Send random buy and sell orders
+
+
+   MqlTradeRequest buy_request;
+   MqlTradeRequest sell_request;
+   MqlTradeResult myresult;
+   ZeroMemory(buy_request);
+   ZeroMemory(sell_request);
+
+// buy specification
+
+   buy_request.action = TRADE_ACTION_DEAL;
+   buy_request.type = ORDER_TYPE_BUY;
+   buy_request.tp = 0;
+   buy_request.deviation = 50;
+   buy_request.symbol = _Symbol;
+   buy_request.volume = 0.1;
+   buy_request.type_filling = ORDER_FILLING_FOK;
+   buy_request.price = SymbolInfoDouble(_Symbol,SYMBOL_ASK);
+
+// sell specification 
+
+   sell_request.action            = TRADE_ACTION_DEAL;
+   sell_request.type              = ORDER_TYPE_SELL ;
+   sell_request.tp                = 0;
+   sell_request.deviation         = 50;
+   sell_request.symbol            = _Symbol;
+   sell_request.volume            = 0.1;
+   sell_request.type_filling      = ORDER_FILLING_FOK;
+   sell_request.price             = SymbolInfoDouble(_Symbol,SYMBOL_BID);
+
+
+
 }
