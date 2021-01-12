@@ -1,6 +1,7 @@
 #include <Trade\Trade.mqh>
 
-CTrade DoTrade;
+CTrade my_trade;
+
 
 void OnTick()
 {
@@ -27,11 +28,20 @@ void OnTick()
    double   accountPROFIT   = AccountInfoDouble(ACCOUNT_PROFIT);
    double   accountEQUITY   = AccountInfoDouble(ACCOUNT_EQUITY);
    int      accountLEVERAGE = AccountInfoInteger(ACCOUNT_LEVERAGE);
+   int      sym_spread      = SymbolInfoInteger(Symbol(),SYMBOL_SPREAD);
    
    
-   Comment("account balance=> ", accountBALANCE, "\n", "account profit=> ", accountPROFIT, "\n",
-           "account equity=> ", accountEQUITY, "\n", "Leverage=> ", accountLEVERAGE, "\n", "How many open positions for this symbol=> ", how_many_positions_are_open_for_this_symbol,
-           "\n", "Hidden Long Swap=>", long_position_swap , "\n", "Hidden Short Swap=> ", short_position_swap );
+   Comment("account balance=> ", accountBALANCE, "\n", 
+           "account profit=> ", accountPROFIT, "\n",
+           "account equity=> ", accountEQUITY, "\n", 
+           "Leverage=> ", accountLEVERAGE, "\n", 
+           "How many open positions for this symbol=> ", how_many_positions_are_open_for_this_symbol,"\n", 
+           "Hidden Long Swap=>", long_position_swap , "\n", 
+           "Hidden Short Swap=> ", short_position_swap,"\n"
+           "Symbol Spread=> ", sym_spread,"\n"
+            );
+            
+            
 
 // A ends here.
 
@@ -70,21 +80,16 @@ void OnTick()
 // The following function has no application for the basic idea. However, I am writing it because we may need it later.
       void close_all_open_positions()
       {
-            for (int iterator = PositionsTotal()-1; /* I don't know why minus 1 ¯\_(ツ)_/¯ */
-                  iterator >= 0; iterator --)
-                  {
-                        int get_positions_tickets = PositionGetTicket(iterator);
-                        // get the positions direction. I am leaving it here just in case you might need ot later.
-                        // int position_sell_or_buy = PositionGetInteger(POSITION_TYPE);
-                        // youtube likn: https://www.youtube.com/watch?v=uuIOwqKR7-I
-                        DoTrade.PositionClose(get_positions_tickets);
-                  } // for loop ends here.
-      } // close_all_open_positions function ends here. 
-
+            int i = PositionsTotal()-1;
+            while (i>=0) 
+            {
+            if (my_trade.PositionClose(PositionGetSymbol(i))) i--;
+            }
+      } // close_all_open_positions function ends here.
 
 
 // random number generator
-string random_number_buy_sell ()
+string random_number_buy_sell()
 {
       int random_number = MathRand()%2;
       if (random_number == 0) return("INSTANT_SELL");
