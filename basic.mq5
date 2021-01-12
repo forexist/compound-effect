@@ -75,7 +75,16 @@ void OnTick()
    sell_request.type_filling      = ORDER_FILLING_FOK;
    sell_request.price             = SymbolInfoDouble(_Symbol,SYMBOL_BID);
 
-}
+
+
+      if (!PositionSelect(_Symbol) && random_number_buy_sell() == "INSTANT_SELL" ) 
+         OrderSend(sell_request,myresult);
+      else if (!PositionSelect(_Symbol) && random_number_buy_sell() == "INSTANT_BUY")
+         OrderSend(buy_request,myresult);
+
+
+
+} // end of onTick function.
 
 // The following function has no application for the basic idea. However, I am writing it because we may need it later.
       void close_all_open_positions()
