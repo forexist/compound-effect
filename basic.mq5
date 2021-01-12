@@ -35,9 +35,7 @@ void OnTick()
 
 // A ends here.
 
-
 // D Send random buy and sell orders
-
 
    MqlTradeRequest buy_request;
    MqlTradeRequest sell_request;
@@ -56,7 +54,7 @@ void OnTick()
    buy_request.type_filling = ORDER_FILLING_FOK;
    buy_request.price = SymbolInfoDouble(_Symbol,SYMBOL_ASK);
 
-// sell specification 
+// sell specification
 
    sell_request.action            = TRADE_ACTION_DEAL;
    sell_request.type              = ORDER_TYPE_SELL ;
@@ -67,6 +65,28 @@ void OnTick()
    sell_request.type_filling      = ORDER_FILLING_FOK;
    sell_request.price             = SymbolInfoDouble(_Symbol,SYMBOL_BID);
 
+}
+
+// The following function has no application for the basic idea. However, I am writing it because we may need it later.
+      void close_all_open_positions()
+      {
+            for (int iterator = PositionsTotal()-1; /* I don't know why minus 1 ¯\_(ツ)_/¯ */
+                  iterator >= 0; iterator --)
+                  {
+                        int get_positions_tickets = PositionGetTicket(iterator);
+                        // get the positions direction. I am leaving it here just in case you might need ot later.
+                        // int position_sell_or_buy = PositionGetInteger(POSITION_TYPE);
+                        // youtube likn: https://www.youtube.com/watch?v=uuIOwqKR7-I
+                        DoTrade.PositionClose(get_positions_tickets);
+                  } // for loop ends here.
+      } // close_all_open_positions function ends here. 
 
 
+
+// random number generator
+string random_number_buy_sell ()
+{
+      int random_number = MathRand()%2;
+      if (random_number == 0) return("INSTANT_SELL");
+      else return("INSTANT_BUY");
 }
