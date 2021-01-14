@@ -12,6 +12,7 @@ void OnTick()
    int      how_many_positions_are_open_for_this_symbol = 0; 
    for (int i = PositionsTotal()-1 ; i>=0; i--)
    {
+   
    string this_chart_symbol = PositionGetSymbol(i);
    // here you should add some code to count sell and buy positions as well. 
    if (Symbol() == this_chart_symbol) how_many_positions_are_open_for_this_symbol+=1;
@@ -39,6 +40,7 @@ void OnTick()
            "Hidden Long Swap=>", long_position_swap , "\n", 
            "Hidden Short Swap=> ", short_position_swap,"\n"
            "Symbol Spread=> ", sym_spread,"\n"
+           "How many candels so far=> ", candel_counter(), "\n"
             );
             
             
@@ -55,13 +57,17 @@ void OnTick()
 
 // buy specification
 
-   int TP = 300;
-   int SL = 200;
-
+   int TP = 400;
+   int SL = 100;
+   double ask = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_ASK),_Digits);
+   double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
+   
+   
+   
    buy_request.action             = TRADE_ACTION_DEAL;
    buy_request.type               = ORDER_TYPE_BUY;
-   buy_request.tp                 = SymbolInfoDouble(_Symbol,SYMBOL_ASK) + TP * SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   buy_request.sl                 = SymbolInfoDouble(_Symbol,SYMBOL_ASK) - SL * SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   buy_request.tp                 = ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   buy_request.sl                 = ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    buy_request.deviation          = 50;
    buy_request.symbol             = _Symbol;
    buy_request.volume             = 0.01;
@@ -72,8 +78,8 @@ void OnTick()
 
    sell_request.action            = TRADE_ACTION_DEAL;
    sell_request.type              = ORDER_TYPE_SELL ;
-   sell_request.tp                = SymbolInfoDouble(_Symbol,SYMBOL_BID) - TP * SymbolInfoDouble(_Symbol,SYMBOL_POINT);;
-   sell_request.sl                = SymbolInfoDouble(_Symbol,SYMBOL_BID) + SL * SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   sell_request.tp                = bid - TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   sell_request.sl                = bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    sell_request.deviation         = 50;
    sell_request.symbol            = _Symbol;
    sell_request.volume            = 0.01;
@@ -86,12 +92,56 @@ void OnTick()
 // ************************* ** ** ** *
 // ************************ ** ** ** *
 // *********************** ** ** ** *
+ 
+      
+      
+      // Order Management
+      
+      MqlRates priceDATA2 [];
+      ArraySetAsSeries(priceDATA2,true);
+      CopyRates(_Symbol,_Period,0,3,priceDATA2);
+      static int candel___counter;
+ 
+      static datetime time_stamp_last_check2;
+ 
+      datetime time_stamp_current_candel2;
+ 
+      time_stamp_current_candel2 = priceDATA2[0].time;
+ 
+      if (time_stamp_current_candel2 != time_stamp_last_check2)
+      {
+         time_stamp_last_check2 = time_stamp_current_candel2;
+         candel___counter++;
+         
+            
+            
+            
+      if (random_number_buy_sell() == "INSTANT_SELL" ) 
+          {
+            OrderSend(sell_request,myresult);
+          }
+          
+      else if (random_number_buy_sell() == "INSTANT_BUY")
+      
+         {
+            OrderSend(buy_request,myresult);
+         }   
+         
+         
+      }
+      
+      /* 
+      
+      THE FOLLOWING BLOCK OF CODE TRADES ONLY WHEN A PREVIOUSLY OPENED POSITION MEETS ITS STOP-LOSS OR TAKE-PROFIT.
+      THE ABOVE BLOCK OF CODE, TRADES WHENEVER A NEW CANLED IS AVAILABLE. 
+      
       if (!PositionSelect(_Symbol) && random_number_buy_sell() == "INSTANT_SELL" ) 
          OrderSend(sell_request,myresult);
       else if (!PositionSelect(_Symbol) && random_number_buy_sell() == "INSTANT_BUY")
          OrderSend(buy_request,myresult);
-
-
+      
+      */ 
+      
 
 } // end of onTick function.
 
@@ -109,7 +159,33 @@ void OnTick()
 // random number generator
 string random_number_buy_sell()
 {
+      MathSrand(GetTickCount());
       int random_number = MathRand()%2;
       if (random_number == 0) return("INSTANT_SELL");
       else return("INSTANT_BUY");
+}
+
+int candel_counter ()
+{
+
+      MqlRates priceDATA [];
+      ArraySetAsSeries(priceDATA,true);
+      CopyRates(_Symbol,_Period,0,3,priceDATA);
+      static int candel__counter;
+ 
+      static datetime time_stamp_last_chech;
+ 
+      datetime time_stamp_current_candel;
+ 
+      time_stamp_current_candel = priceDATA[0].time;
+ 
+      if (time_stamp_current_candel != time_stamp_last_chech)
+      {
+         time_stamp_last_chech = time_stamp_current_candel;
+ 
+         candel__counter++;
+      }
+      
+      return candel__counter;
+
 }
