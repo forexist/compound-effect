@@ -72,6 +72,8 @@ void OnTick()
    double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
    double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
    
+   double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
+   double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
    
     
    // int TP = 1000;
@@ -81,7 +83,7 @@ void OnTick()
    buy_request.action             = TRADE_ACTION_DEAL;
    buy_request.type               = ORDER_TYPE_BUY;
    buy_request.tp                 = Price_at_take_profit_BUY_ORDER_double; // ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   buy_request.sl                 =  // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   buy_request.sl                 = Price_at_stop_loss_BUY_ORDER_double; // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    buy_request.deviation          = 50;
    buy_request.symbol             = _Symbol;
    buy_request.volume             = 0.01;
@@ -92,8 +94,8 @@ void OnTick()
 
    sell_request.action            = TRADE_ACTION_DEAL;
    sell_request.type              = ORDER_TYPE_SELL ;
-   sell_request.tp                = bid - TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   sell_request.sl                = bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   sell_request.tp                = Price_at_take_profit_SELL_ORDER_double; // bid - TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   sell_request.sl                = Price_at_stop_loss_SELL_ORDER_double; // bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    sell_request.deviation         = 50;
    sell_request.symbol            = _Symbol;
    sell_request.volume            = 0.01;
