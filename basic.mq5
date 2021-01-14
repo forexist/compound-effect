@@ -55,7 +55,7 @@ void OnTick()
    ZeroMemory(buy_request);
    ZeroMemory(sell_request);
 
-// buy specification
+   // buy specification
 
    // formula of profit or lose ===> percentage = ((v2-v1)/v1)*100
    
@@ -72,8 +72,8 @@ void OnTick()
    double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
    double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
    
-   double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
-   double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
+   double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * ask)/(accountLEVERAGE*100))+bid;
+   double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * ask)/(accountLEVERAGE*100))+bid;
    
     
    // int TP = 1000;
