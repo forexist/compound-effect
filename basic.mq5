@@ -57,17 +57,31 @@ void OnTick()
 
 // buy specification
 
-   int TP = 400;
-   int SL = 100;
+   // formula of profit or lose ===> percentage = ((v2-v1)/v1)*100
+   
+   
+   
+   
    double ask = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_ASK),_Digits);
    double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
    
    
+   double TP_Percentage = 30; // for instance 30 mean 30 percentage or 30% of profit on the opened position.
+   double SL_Percentage = 10; // for instance 10 mean -10 percentage or -10% of losage on the opened position.
+   
+   double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
+   double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
+   
+   
+    
+   // int TP = 1000;
+   // int SL = 300;
+   
    
    buy_request.action             = TRADE_ACTION_DEAL;
    buy_request.type               = ORDER_TYPE_BUY;
-   buy_request.tp                 = ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   buy_request.sl                 = ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   buy_request.tp                 = Price_at_take_profit_BUY_ORDER_double; // ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   buy_request.sl                 =  // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    buy_request.deviation          = 50;
    buy_request.symbol             = _Symbol;
    buy_request.volume             = 0.01;
