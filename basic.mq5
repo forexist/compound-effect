@@ -1,5 +1,10 @@
 #include <Trade\Trade.mqh>
 
+input int TP_percent_for_OPT = 100;
+input int SL_percent_for_OPT = 10;
+input double VOL_percent_for_OPT = 0.01;
+
+
 CTrade my_trade;
 
 
@@ -66,8 +71,8 @@ void OnTick()
    double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
    
    
-   double TP_Percentage = 30; // for instance 30 mean 30 percentage or 30% of profit on the opened position.
-   double SL_Percentage = 10; // for instance 10 mean -10 percentage or -10% of losage on the opened position.
+   double TP_Percentage = TP_percent_for_OPT; // for instance 30 mean 30 percentage or 30% of profit on the opened position.
+   double SL_Percentage = SL_percent_for_OPT; // for instance 10 mean -10 percentage or -10% of losage on the opened position.
    
    double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
    double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
@@ -86,7 +91,7 @@ void OnTick()
    buy_request.sl                 = Price_at_stop_loss_BUY_ORDER_double; // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    buy_request.deviation          = 50;
    buy_request.symbol             = _Symbol;
-   buy_request.volume             = 0.01;
+   buy_request.volume             = VOL_percent_for_OPT;
    buy_request.type_filling       = ORDER_FILLING_FOK;
    buy_request.price              = SymbolInfoDouble(_Symbol,SYMBOL_ASK);
 
@@ -98,7 +103,7 @@ void OnTick()
    sell_request.sl                = Price_at_stop_loss_SELL_ORDER_double; // bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    sell_request.deviation         = 50;
    sell_request.symbol            = _Symbol;
-   sell_request.volume            = 0.01;
+   sell_request.volume            = VOL_percent_for_OPT;
    sell_request.type_filling      = ORDER_FILLING_FOK;
    sell_request.price             = SymbolInfoDouble(_Symbol,SYMBOL_BID);
    
