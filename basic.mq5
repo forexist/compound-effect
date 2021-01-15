@@ -1,6 +1,6 @@
 #include <Trade\Trade.mqh>
 
-input int TP_percent_for_OPT = 100;
+input int TP_percent_for_OPT = 30;
 input int SL_percent_for_OPT = 10;
 input double VOL_percent_for_OPT = 0.01;
 
