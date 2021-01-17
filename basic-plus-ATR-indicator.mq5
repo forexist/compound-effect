@@ -1,9 +1,15 @@
 #include <Trade\Trade.mqh>
 
+input int input_ATR_domain = 1000;
+
+/* the following code would not be used until testing ATR idea performance.
+
+ 
 input int TP_percent_for_OPT = 30;
 input int SL_percent_for_OPT = 10;
 input double VOL_percent_for_OPT = 0.01;
 
+*/
 
 CTrade my_trade;
 
@@ -70,6 +76,7 @@ void OnTick()
    
    double ask = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_ASK),_Digits);
    double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
+   
    
    
    double TP_Percentage = TP_percent_for_OPT; // for instance 30 mean 30 percentage or 30% of profit on the opened position.
@@ -214,10 +221,10 @@ int candel_counter ()
 
 
 
-      double a_t_r_()
+      double a_t_r_(int input_ATR_domain)
          {
                double my_price_array [];
-               int atr_definition = iATR (_Symbol,_Period,1000);
+               int atr_definition = iATR (_Symbol,_Period,input_ATR_domain);
                ArraySetAsSeries(my_price_array,true);
                CopyBuffer(atr_definition,0,0,3,my_price_array);
                double ATR_Value = NormalizeDouble(my_price_array[0],2);
