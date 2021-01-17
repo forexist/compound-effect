@@ -1,7 +1,9 @@
 #include <Trade\Trade.mqh>
 
 input int input_ATR_domain = 1000;
-input double VOL_percent_for_OPT = 0.01;
+input double TP_PERCENT_OF_ATR = 0.75; // Minimum = 0.01 & Maximum = 1
+input double SL_PERCENT_OF_ATR = 0.25; // Minimum = 0.01 & Maximum = 1
+input double VOL_percent_for_OPT = 0.01; // Minimum = 0.01
 
 
 /* the following code would not be used until testing ATR idea performance.
@@ -75,7 +77,17 @@ void OnTick()
    double ask = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_ASK),_Digits);
    double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
    
-   Comment(a_t_r_(input_ATR_domain));
+   double expected_price_movement = a_t_r_(input_ATR_domain);
+   
+   double corrected_TP = NormalizeDouble(expected_price_movement * TP_PERCENT_OF_ATR,_Digits);
+   double corrected_SL = NormalizeDouble(expected_price_movement * SL_PERCENT_OF_ATR,_Digits);
+   
+   
+   double Price_at_take_profit_BUY_ORDER_double   = ask + corrected_TP;
+   double Price_at_stop_loss_BUY_ORDER_double     = ask - corrected_SL;
+   
+   double Price_at_take_profit_SELL_ORDER_double  = bid - corrected_TP;
+   double Price_at_stop_loss_SELL_ORDER_double    = bid + corrected_SL;
    
    
    /* USING ATR THE FOLLOWING BLOCK IS NOT NEEDED ANYMORE 
@@ -97,8 +109,8 @@ void OnTick()
    
    buy_request.action             = TRADE_ACTION_DEAL;
    buy_request.type               = ORDER_TYPE_BUY;
-   buy_request.tp                 = ask + a_t_r_(input_ATR_domain); // Price_at_take_profit_BUY_ORDER_double; // ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   buy_request.sl                 = ask - a_t_r_(input_ATR_domain); // Price_at_stop_loss_BUY_ORDER_double; // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   buy_request.tp                 = Price_at_take_profit_BUY_ORDER_double; // ask + TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   buy_request.sl                 = Price_at_stop_loss_BUY_ORDER_double; // ask - SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    buy_request.deviation          = 50;
    buy_request.symbol             = _Symbol;
    buy_request.volume             = VOL_percent_for_OPT;
@@ -109,8 +121,8 @@ void OnTick()
 
    sell_request.action            = TRADE_ACTION_DEAL;
    sell_request.type              = ORDER_TYPE_SELL ;
-   sell_request.tp                = bid - a_t_r_(input_ATR_domain); // Price_at_take_profit_SELL_ORDER_double; // bid - TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
-   sell_request.sl                = bid + a_t_r_(input_ATR_domain); // Price_at_stop_loss_SELL_ORDER_double; // bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
+   sell_request.tp                = Price_at_take_profit_SELL_ORDER_double; // bid - TP * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT);
+   sell_request.sl                = Price_at_stop_loss_SELL_ORDER_double; // bid + SL * _Point; //SymbolInfoDouble(_Symbol,SYMBOL_POINT); 
    sell_request.deviation         = 50;
    sell_request.symbol            = _Symbol;
    sell_request.volume            = VOL_percent_for_OPT;
@@ -223,12 +235,14 @@ int candel_counter ()
 
 
 
-      double a_t_r_(int domain)
+// ATR function
+ double a_t_r_(int domain)
          {
                double my_price_array [];
                int atr_definition = iATR (_Symbol,_Period, domain);
+               
                ArraySetAsSeries(my_price_array,true);
-               CopyBuffer(atr_definition,0,0,3,my_price_array);
-               double ATR_Value = NormalizeDouble(my_price_array[0],2);
+               CopyBuffer(atr_definition,0,1,3,my_price_array);
+               double ATR_Value = NormalizeDouble(my_price_array[0],5);
                return ATR_Value;
          }
