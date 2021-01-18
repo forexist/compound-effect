@@ -2,6 +2,7 @@
 
 input int TP_percent_for_OPT = 30;
 input int SL_percent_for_OPT = 10;
+
 input double VOL_percent_for_OPT = 0.01;
 
 
@@ -36,7 +37,7 @@ void OnTick()
    int      accountLEVERAGE = AccountInfoInteger(ACCOUNT_LEVERAGE);
    int      sym_spread      = SymbolInfoInteger(Symbol(),SYMBOL_SPREAD);
    
-   
+  /* 
    Comment("account balance=> ", accountBALANCE, "\n", 
            "account profit=> ", accountPROFIT, "\n",
            "account equity=> ", accountEQUITY, "\n", 
@@ -49,6 +50,7 @@ void OnTick()
             );
             
             
+*/
 
 // A ends here.
 
@@ -66,7 +68,6 @@ void OnTick()
    
    
    
-   
    double ask = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_ASK),_Digits);
    double bid = NormalizeDouble(SymbolInfoDouble(_Symbol,SYMBOL_BID),_Digits);
    
@@ -77,8 +78,8 @@ void OnTick()
    double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
    double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
    
-   double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * ask)/(accountLEVERAGE*100))+bid;
-   double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * ask)/(accountLEVERAGE*100))+bid;
+   double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * bid)/(accountLEVERAGE*100))+bid;
+   double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * bid)/(accountLEVERAGE*100))+bid;
    
     
    // int TP = 1000;
@@ -181,9 +182,10 @@ void OnTick()
 string random_number_buy_sell()
 {
       MathSrand(GetTickCount());
-      int random_number = MathRand()%2;
-      if (random_number == 0) return("INSTANT_SELL");
-      else return("INSTANT_BUY");
+      int random_number = MathRand()%200;
+      if (random_number >= 101) return("INSTANT_SELL");
+      if (random_number < 101 ) return("INSTANT_BUY");
+      return "error";
 }
 
 int candel_counter ()
@@ -210,3 +212,17 @@ int candel_counter ()
       return candel__counter;
 
 }
+
+
+/*
+      double a_t_r_()
+         {
+               double my_price_array [];
+               int atr_definition = iATR (_Symbol,_Period,1000);
+               ArraySetAsSeries(my_price_array,true);
+               CopyBuffer(atr_definition,0,0,3,my_price_array);
+               double ATR_Value = NormalizeDouble(my_price_array[0],2);
+               return ATR_Value;
+         }
+         
+*/         
