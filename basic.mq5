@@ -36,6 +36,7 @@ void OnTick()
    double   accountEQUITY   = AccountInfoDouble(ACCOUNT_EQUITY);
    int      accountLEVERAGE = AccountInfoInteger(ACCOUNT_LEVERAGE);
    int      sym_spread      = SymbolInfoInteger(Symbol(),SYMBOL_SPREAD);
+   double   min_balance     = VOL_percent_for_OPT*100000/accountLEVERAGE;
    
   /* 
    Comment("account balance=> ", accountBALANCE, "\n", 
@@ -130,7 +131,7 @@ void OnTick()
  
       time_stamp_current_candel2 = priceDATA2[0].time;
  
-      if (time_stamp_current_candel2 != time_stamp_last_check2)
+      if (time_stamp_current_candel2 != time_stamp_last_check2 && accountBALANCE > min_balance * 10)
       {
          time_stamp_last_check2 = time_stamp_current_candel2;
          candel___counter++;
