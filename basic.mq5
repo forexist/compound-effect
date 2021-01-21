@@ -77,7 +77,7 @@ void OnTick()
    double SL_Percentage = SL_percent_for_OPT; // for instance 10 mean -10 percentage or -10% of losage on the opened position.
    
    double Price_at_take_profit_BUY_ORDER_double = ((TP_Percentage * ask)/(accountLEVERAGE*100))+ask;
-   double Price_at_stop_loss_BUY_ORDER_double   = ((-1*SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
+   double Price_at_stop_loss_BUY_ORDER_double   = ((-1 *SL_Percentage * ask)/(accountLEVERAGE*100))+ask;
    
    double Price_at_take_profit_SELL_ORDER_double = ((-1*TP_Percentage * bid)/(accountLEVERAGE*100))+bid;
    double Price_at_stop_loss_SELL_ORDER_double   = ((SL_Percentage * bid)/(accountLEVERAGE*100))+bid;
@@ -116,7 +116,13 @@ void OnTick()
 // ************************ ** ** ** *
 // *********************** ** ** ** *
  
+      static double max_equity_so_far;
+      if (max_equity_so_far < accountEQUITY) max_equity_so_far = accountEQUITY;
       
+      Comment(
+      "eq_max = ", max_equity_so_far, "\n",
+      "eq= ", accountEQUITY
+      );
       
       // Order Management
       
@@ -124,14 +130,15 @@ void OnTick()
       ArraySetAsSeries(priceDATA2,true);
       CopyRates(_Symbol,_Period,0,3,priceDATA2);
       static int candel___counter;
- 
+      
       static datetime time_stamp_last_check2;
  
       datetime time_stamp_current_candel2;
  
       time_stamp_current_candel2 = priceDATA2[0].time;
+      
  
-      if (time_stamp_current_candel2 != time_stamp_last_check2 && accountBALANCE > min_balance * 10)
+      if (time_stamp_current_candel2 != time_stamp_last_check2 && accountEQUITY > 0.9 * max_equity_so_far)
       {
          time_stamp_last_check2 = time_stamp_current_candel2;
          candel___counter++;
@@ -165,7 +172,6 @@ void OnTick()
       
       */ 
       
-
 } // end of onTick function.
 
 // The following function has no application for the basic idea. However, I am writing it because we may need it later.
@@ -189,6 +195,9 @@ string random_number_buy_sell()
       return "error";
 }
 
+
+/*
+
 int candel_counter ()
 {
 
@@ -196,23 +205,19 @@ int candel_counter ()
       ArraySetAsSeries(priceDATA,true);
       CopyRates(_Symbol,_Period,0,3,priceDATA);
       static int candel__counter;
- 
       static datetime time_stamp_last_chech;
- 
       datetime time_stamp_current_candel;
- 
       time_stamp_current_candel = priceDATA[0].time;
  
       if (time_stamp_current_candel != time_stamp_last_chech)
       {
          time_stamp_last_chech = time_stamp_current_candel;
- 
          candel__counter++;
       }
-      
       return candel__counter;
-
 }
+
+*/
 
 
 /*
