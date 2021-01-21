@@ -2,7 +2,7 @@
 
 input double TP_percent_for_OPT = 30;
 input double SL_percent_for_OPT = 10;
-
+input double maximum_equity_allowed = 0.9; // Maximum = 0.95 & Minimum = 0.05
 input double VOL_percent_for_OPT = 0.01;
 
 
@@ -138,7 +138,7 @@ void OnTick()
       time_stamp_current_candel2 = priceDATA2[0].time;
       
  
-      if (time_stamp_current_candel2 != time_stamp_last_check2 && accountEQUITY > 0.9 * max_equity_so_far)
+      if (time_stamp_current_candel2 != time_stamp_last_check2 && accountEQUITY > maximum_equity_allowed * max_equity_so_far)
       {
          time_stamp_last_check2 = time_stamp_current_candel2;
          candel___counter++;
