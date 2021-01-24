@@ -1,10 +1,10 @@
 #include <Trade\Trade.mqh>
 
-input double TP_percent_for_OPT = 30; // Take profit percentage
-input double SL_percent_for_OPT = 10; // Stop lose percentage
-input double maximum_equity_allowed = 0.9; // Equity alocator Maximum = 1 & Minimum = 0
-input double VOL_percent_for_OPT = 0.01; // Lot size
-input int trailing_SL = 5; // Trailing Stop Percentage
+input double TP_percent_for_OPT = 30;
+input double SL_percent_for_OPT = 10;
+input double maximum_equity_allowed = 0.9; // Maximum = 0.95 & Minimum = 0.05
+input double VOL_percent_for_OPT = 0.01;
+input int trailing_SL = 5;
 
 CTrade my_trade;
 
@@ -96,8 +96,6 @@ void OnTick()
    buy_request.volume             = VOL_percent_for_OPT;
    buy_request.type_filling       = ORDER_FILLING_FOK;
    buy_request.price              = SymbolInfoDouble(_Symbol,SYMBOL_ASK);
-   buy_request.comment            = IntegerToString(candel_counter());
-   
 
 // sell specification
 
@@ -110,7 +108,7 @@ void OnTick()
    sell_request.volume            = VOL_percent_for_OPT;
    sell_request.type_filling      = ORDER_FILLING_FOK;
    sell_request.price             = SymbolInfoDouble(_Symbol,SYMBOL_BID);
-   sell_request.comment            = IntegerToString(candel_counter());
+   
 
 
 // Placing orders occur HERE ** ** ** **
@@ -143,29 +141,28 @@ void OnTick()
  
       time_stamp_current_candel2 = priceDATA2[0].time;
       
+ 
       if (time_stamp_current_candel2 != time_stamp_last_check2) 
       {
          time_stamp_last_check2 = time_stamp_current_candel2;
-         candel___counter++;   
-                        if (random_number_buy_sell() == "INSTANT_SELL" && accountEQUITY > maximum_equity_allowed * max_equity_so_far) 
-                              {
-                                 OrderSend(sell_request,myresult);
-                              }
+         candel___counter++;
+         
+            
+            
+            
+      if (random_number_buy_sell() == "INSTANT_SELL" && accountEQUITY > maximum_equity_allowed * max_equity_so_far) 
+          {
+            OrderSend(sell_request,myresult);
+          }
           
-                        else if (random_number_buy_sell() == "INSTANT_BUY" && accountEQUITY > maximum_equity_allowed * max_equity_so_far)
+      else if (random_number_buy_sell() == "INSTANT_BUY" && accountEQUITY > maximum_equity_allowed * max_equity_so_far)
       
-                              {
-                                 OrderSend(buy_request,myresult);
-                              }      
+         {
+            OrderSend(buy_request,myresult);
+         }   
+         
+         
       }
-      
-      
-      
-      
-      
-      
-      
-      
       
       /* 
       
@@ -203,35 +200,7 @@ string random_number_buy_sell()
 }
 
 
-
-
-void check_trailing_stop (double ask, int SL)
-{
-      double SLPercentage = NormalizeDouble((100-SL)*ask,_Digits);
-      for (int i = PositionsTotal()-1;i>=0;i--)
-      {
-         
-         string symbol = PositionGetSymbol(i);
-         if (_Symbol==symbol)
-         {
-            ulong positionticket = PositionGetInteger(POSITION_TICKET);
-            double current_stop_lose = PositionGetDouble(POSITION_SL);
-            
-            if (current_stop_lose  < SLPercentage)
-            {
-                  my_trade.PositionModify(positionticket,current_stop_lose+10*_Point,0);
-            }
-            
-         }
-         
-         
-      }
-}
-
-
-
-
-
+/*
 
 int candel_counter ()
 {
@@ -252,7 +221,7 @@ int candel_counter ()
       return candel__counter;
 }
 
-
+*/
 
 
 /*
@@ -267,5 +236,3 @@ int candel_counter ()
          }
          
 */         
-
-
