@@ -158,19 +158,19 @@ void OnTick()
                string symbol = PositionGetSymbol(delta_time_lag); 
                if(PositionSelect(symbol)) // ONLY ORDERS THAT ARE BEHIND AND STILL OPEN SINCE SPECIFIC DAYS AGO.
                      {
-                           if (PositionGetDouble(POSITION_PROFIT) >= 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
-                           if (PositionGetDouble(POSITION_PROFIT) < 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                           if (PositionGetDouble(POSITION_PROFIT) > 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                           if (PositionGetDouble(POSITION_PROFIT) <= 0) 
+                           {
+                                 
+                           }
                            if (PositionGetInteger(POSITION_TICKET) == delta_time_lag) 
                            {
-                                 trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                                 
                            }
               Comment( 
               "ticket ",PositionGetInteger(POSITION_TICKET),"\n",
               "id ",PositionGetInteger(POSITION_IDENTIFIER),"\n",
-              "time ",PositionGetInteger(POSITION_TIME),"\n",
-              "time in mili ",PositionGetInteger(POSITION_TIME_MSC),"\n",
-              "type ",PositionGetInteger(POSITION_TYPE),"\n",
-              "magic ",PositionGetInteger(POSITION_MAGIC),"\n",
+              "Opened time ",PositionGetInteger(POSITION_TIME),"\n",
               "magic ",PositionGetString(POSITION_COMMENT),"\n"); 
          }
          }
