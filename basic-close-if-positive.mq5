@@ -151,31 +151,31 @@ void OnTick()
          time_stamp_last_check2 = time_stamp_current_candel2;
          candel___counter++;   
         
-         int delta_time_lag = candel___counter-retrospective_reform_days;
+        /* int delta_time_lag = candel___counter-retrospective_reform_days;
          
          if (delta_time_lag >1)
          {
                string symbol = PositionGetSymbol(delta_time_lag); 
                if(PositionSelect(symbol)) // ONLY ORDERS THAT ARE BEHIND AND STILL OPEN SINCE SPECIFIC DAYS AGO.
                      {
-                           if (PositionGetDouble(POSITION_PROFIT) >= 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
-                           if (PositionGetDouble(POSITION_PROFIT) < 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                           if (PositionGetDouble(POSITION_PROFIT) > 0) trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                           if (PositionGetDouble(POSITION_PROFIT) <= 0) 
+                           {
+                                 
+                           }
                            if (PositionGetInteger(POSITION_TICKET) == delta_time_lag) 
                            {
-                                 trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+                                 
                            }
               Comment( 
               "ticket ",PositionGetInteger(POSITION_TICKET),"\n",
               "id ",PositionGetInteger(POSITION_IDENTIFIER),"\n",
-              "time ",PositionGetInteger(POSITION_TIME),"\n",
-              "time in mili ",PositionGetInteger(POSITION_TIME_MSC),"\n",
-              "type ",PositionGetInteger(POSITION_TYPE),"\n",
-              "magic ",PositionGetInteger(POSITION_MAGIC),"\n",
+              "Opened time ",PositionGetInteger(POSITION_TIME),"\n",
               "magic ",PositionGetString(POSITION_COMMENT),"\n"); 
          }
          }
          
-         
+         */
          
                         if (random_number_buy_sell() == "INSTANT_SELL" && accountEQUITY > maximum_equity_allowed * max_equity_so_far) 
                               {
@@ -190,7 +190,7 @@ void OnTick()
       }
       
       
-      
+      close_all_open_in_profit_positions();
       
       
       
@@ -212,6 +212,34 @@ void OnTick()
 } // end of onTick function.
 
 // The following function has no application for the basic idea. However, I am writing it because we may need it later.
+      
+      void close_all_open_in_profit_positions()
+      {
+            for (int i = PositionsTotal()-1;i>=0;i--)
+
+     {    
+         string symbol = PositionGetSymbol(i);
+         if(PositionSelect(symbol))
+         {
+              if (PositionGetDouble(POSITION_PROFIT) >= 0) my_trade.PositionClose(PositionGetInteger(POSITION_TICKET));
+              /* 
+              Comment( 
+              "ticket ",PositionGetInteger(POSITION_TICKET),"\n",
+              "id ",PositionGetInteger(POSITION_IDENTIFIER),"\n",
+              "time ",PositionGetInteger(POSITION_TIME),"\n",
+              "time in mili ",PositionGetInteger(POSITION_TIME_MSC),"\n",
+              "type ",PositionGetInteger(POSITION_TYPE),"\n",
+              "magic ",PositionGetInteger(POSITION_MAGIC),"\n",
+              "comment ",PositionGetString(POSITION_COMMENT),"\n"
+              "profit ",PositionGetDouble(POSITION_PROFIT),"\n"
+              );
+              */ 
+         }
+         
+      }
+     
+      }
+      
       void close_all_open_positions()
       {
             int i = PositionsTotal()-1;
