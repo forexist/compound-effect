@@ -240,6 +240,8 @@ void OnTick()
      
       }
       
+      
+/*
       void close_all_open_positions()
       {
             int i = PositionsTotal()-1;
@@ -248,7 +250,7 @@ void OnTick()
             if (my_trade.PositionClose(PositionGetSymbol(i))) i--;
             }
       } // close_all_open_positions function ends here.
-
+*/
 
 // random number generator
 // THIS IS THE MAIN BRAIN OF THE ALGORITHM :)))))
